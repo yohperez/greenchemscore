@@ -17,7 +17,7 @@ Este proyecto está construido principalmente con:
 
 ## 🚀 Demo en Vivo
 
-👉 [Ver aplicación en Streamlit Cloud](https://tu-app.streamlit.app) *(reemplazar con tu URL)*
+👉 [Ver aplicación en Streamlit Cloud](https://greenchemscore.streamlit.app/)
 
 ---
 
