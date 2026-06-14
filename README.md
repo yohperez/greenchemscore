@@ -1,32 +1,23 @@
 # 🧪 GreenChem Score
 
-<p align="center">
-  <img src="https://img.icons8.com/color/240/000000/test-tube.png" alt="GreenChem Score Logo" width="120">
-</p>
+**Pipeline ETL para Clasificación Química Sostenible**
 
-<p align="center">
-  <b>Pipeline ETL para Clasificación Química Sostenible</b><br>
-  <i>Evalúa la toxicidad y sostenibilidad de compuestos químicos industriales</i>
-</p>
+Aplicación Streamlit que extrae datos de compuestos químicos, los enriquece con información de la API de PubChem (PUG REST), y genera visualizaciones interactivas para evaluar la sostenibilidad química.
 
-<p align="center">
-  <a href="https://greenchemscore.streamlit.app" target="_blank">
-    <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Streamlit App">
-  </a>
-  <a href="https://hub.docker.com/r/yohperez/greenchemscore" target="_blank">
-    <img src="https://img.shields.io/docker/pulls/yohperez/greenchemscore?logo=docker" alt="Docker Pulls">
-  </a>
-  <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python" alt="Python 3.11">
-  <img src="https://img.shields.io/badge/License-MIT-green" alt="License MIT">
-</p>
+---
+
+## 📊 Composición del Proyecto
+
+Este proyecto está construido principalmente con:
+- **Python** (92.1%) — Lógica principal, ETL y análisis
+- **Dockerfile** (4.7%) — Containerización
+- **Makefile** (3.2%) — Automatización de tareas
 
 ---
 
 ## 🚀 Demo en Vivo
 
-👉 **[https://greenchemscore.streamlit.app](https://greenchemscore.streamlit.app)**
-
-La app está desplegada en **Streamlit Cloud** y lista para usar sin instalación.
+👉 [Ver aplicación en Streamlit Cloud](https://greenchemscore.streamlit.app/)
 
 ---
 
@@ -39,7 +30,13 @@ La forma más fácil de ejecutar la app localmente es usando Docker. No necesita
 - **Windows/Mac**: [Descargar Docker Desktop](https://www.docker.com/products/docker-desktop)
 - **Linux**: `sudo apt install docker.io`
 
-### Comando único
+- **Streamlit** — Framework para apps de datos
+- **Plotly** — Visualizaciones interactivas
+- **Folium** — Mapas geográficos
+- **Pandas** — Manipulación de datos
+- **Requests + BeautifulSoup** — HTTP y parsing HTML
+- **SQLite3** — Base de datos ligera
+- **Docker** — Containerización y despliegue
 
 ```bash
 docker run -p 8501:8501 yohperez/greenchemscore:latest
@@ -72,21 +69,20 @@ services:
     environment:
       - STREAMLIT_SERVER_HEADLESS=true
 ```
-
-Comandos:
-```bash
-# Iniciar
-docker-compose up -d
-
-# Ver logs
-docker-compose logs -f
-
-# Detener
-docker-compose down
-
-# Actualizar a nueva versión
-docker-compose pull
-docker-compose up -d
+greenchemscore/
+├── app.py                 # Aplicación Streamlit principal
+├── requirements.txt       # Dependencias Python
+├── Dockerfile             # Imagen Docker para producción
+├── Makefile               # Automatización de tareas comunes
+├── .dockerignore          # Exclusiones de Docker
+├── .gitignore             # Exclusiones de Git
+├── .streamlit/
+│   ├── config.toml        # Configuración de Streamlit
+│   └── secrets.toml       # Secrets (template, NO commitear)
+├── .github/
+│   └── workflows/
+│       └── docker-push.yml # CI/CD para Docker Hub
+└── README.md              # Este archivo
 ```
 
 ### Con persistencia de datos
@@ -107,16 +103,8 @@ Los archivos se guardarán en la carpeta `data/` local.
 Cuando haya una nueva versión:
 
 ```bash
-docker pull yohperez/greenchemscore:latest
-docker stop greenchem
-docker rm greenchem
-docker run -p 8501:8501 --name greenchem yohperez/greenchemscore:latest
-```
-
-O con Docker Compose:
-```bash
-docker-compose pull
-docker-compose up -d
+git clone https://github.com/yohperez/greenchemscore.git
+cd greenchemscore
 ```
 
 ---
@@ -246,11 +234,26 @@ docker-compose up --build -d
 
 ---
 
+## 🚀 Makefile
+
+El proyecto incluye un `Makefile` para automatizar tareas comunes:
+
+```bash
+make help      # Mostrar comandos disponibles
+make install   # Instalar dependencias
+make run       # Ejecutar aplicación local
+make build     # Construir imagen Docker
+make docker    # Ejecutar contenedor Docker
+```
+
+---
+
 ## ☁️ Despliegue en Streamlit Cloud
 
-1. Ve a [share.streamlit.io](https://share.streamlit.io) e inicia sesión con GitHub.
-2. Clic en **"New app"** → seleccionar tu repositorio.
-3. Configurar:
+1. **Crear repositorio en GitHub** y subir este código.
+2. Ir a [share.streamlit.io](https://share.streamlit.io) e iniciar sesión con GitHub.
+3. Hacer clic en **"New app"** → seleccionar tu repositorio.
+4. Configurar:
    - **Repository:** `yohperez/greenchemscore`
    - **Branch:** `main`
    - **Main file path:** `app.py`
@@ -290,6 +293,12 @@ El repositorio incluye un workflow de GitHub Actions que construye y empuja la i
 docker pull yohperez/greenchemscore:latest
 ```
 
+### Ejecutar desde Docker Hub
+
+```bash
+docker run -p 8501:8501 yohperez/greenchemscore:latest
+```
+
 ---
 
 ## 🛡️ Gobernanza Ética
@@ -325,9 +334,4 @@ MIT License — ver [LICENSE](LICENSE) para más detalles.
 
 ---
 
-<p align="center">
-  <b>Desarrollado con 🌿 por <a href="https://github.com/yohperez">Yoh Perez</a></b><br>
-  <a href="https://greenchemscore.streamlit.app">🌐 App en Vivo</a> • 
-  <a href="https://hub.docker.com/r/yohperez/greenchemscore">🐳 Docker Hub</a> • 
-  <a href="https://github.com/yohperez/greenchemscore">💻 GitHub</a>
-</p>
+**Desarrollado con 🌿 por [yohperez](https://github.com/yohperez)**
