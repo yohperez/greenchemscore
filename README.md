@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🧪 GreenChem Score
 
 **Pipeline ETL para Clasificación Química Sostenible**
@@ -205,3 +206,6 @@ MIT License — ver [LICENSE](LICENSE) para más detalles.
 ---
 
 **Desarrollado con 🌿 por [Tu Nombre](https://github.com/tu-usuario)**
+=======
+# greenchemscore
+>>>>>>> c62b970dcc98bfd6ee359f94783a4d320a5b0de7
