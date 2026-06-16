@@ -2,7 +2,7 @@
 
 **Pipeline ETL para Clasificación Química Sostenible**
 
-Aplicación Streamlit que extrae datos de compuestos químicos, los enriquece con información de la API de PubChem (PUG REST), y genera visualizaciones interactivas para evaluar la sostenibilidad química.
+Aplicación Streamlit que extrae datos de compuestos químicos, los enriquece con información de la API de PubChem (PUG REST), y genera visualizaciones interactivas para evaluar la sostenibilidad [...]
 
 ---
 
@@ -21,6 +21,20 @@ Este proyecto está construido principalmente con:
 
 ---
 
+## 🛠️ Tecnologías
+
+| Librería | Icono | Descripción | Uso |
+|----------|-------|-------------|-----|
+| **Streamlit** | 🎈 | Framework para apps de datos | Interface principal de la app |
+| **Plotly** | 📈 | Visualizaciones interactivas | Gráficos, heatmaps, radar charts |
+| **Folium** | 🗺️ | Mapas geográficos | Visualización de ubicaciones industriales |
+| **Pandas** | 🐼 | Manipulación de datos | ETL y procesamiento de datasets |
+| **Requests + BeautifulSoup** | 🌐 | HTTP y parsing HTML | Scraping y APIs REST |
+| **SQLite3** | 💾 | Base de datos ligera | Persistencia de datos |
+| **Docker** | 🐳 | Containerización | Despliegue reproducible |
+
+---
+
 ## 🐳 Uso Rápido con Docker (Para Amigos)
 
 La forma más fácil de ejecutar la app localmente es usando Docker. No necesitas instalar Python ni dependencias.
@@ -30,13 +44,7 @@ La forma más fácil de ejecutar la app localmente es usando Docker. No necesita
 - **Windows/Mac**: [Descargar Docker Desktop](https://www.docker.com/products/docker-desktop)
 - **Linux**: `sudo apt install docker.io`
 
-- **Streamlit** — Framework para apps de datos
-- **Plotly** — Visualizaciones interactivas
-- **Folium** — Mapas geográficos
-- **Pandas** — Manipulación de datos
-- **Requests + BeautifulSoup** — HTTP y parsing HTML
-- **SQLite3** — Base de datos ligera
-- **Docker** — Containerización y despliegue
+### Ejecución rápida
 
 ```bash
 docker run -p 8501:8501 yohperez/greenchemscore:latest
@@ -69,20 +77,10 @@ services:
     environment:
       - STREAMLIT_SERVER_HEADLESS=true
 ```
-greenchemscore/
-├── app.py                 # Aplicación Streamlit principal
-├── requirements.txt       # Dependencias Python
-├── Dockerfile             # Imagen Docker para producción
-├── Makefile               # Automatización de tareas comunes
-├── .dockerignore          # Exclusiones de Docker
-├── .gitignore             # Exclusiones de Git
-├── .streamlit/
-│   ├── config.toml        # Configuración de Streamlit
-│   └── secrets.toml       # Secrets (template, NO commitear)
-├── .github/
-│   └── workflows/
-│       └── docker-push.yml # CI/CD para Docker Hub
-└── README.md              # Este archivo
+
+Ejecuta con:
+```bash
+docker-compose up -d
 ```
 
 ### Con persistencia de datos
@@ -97,15 +95,6 @@ docker run -p 8501:8501 \
 ```
 
 Los archivos se guardarán en la carpeta `data/` local.
-
-### Actualizar la app
-
-Cuando haya una nueva versión:
-
-```bash
-git clone https://github.com/yohperez/greenchemscore.git
-cd greenchemscore
-```
 
 ---
 
@@ -180,18 +169,6 @@ La app estará en `http://localhost:8501`.
 
 ---
 
-## 🛠️ Tecnologías
-
-- **Streamlit** — Framework de la app
-- **Plotly** — Visualizaciones interactivas
-- **Folium** — Mapas geográficos
-- **Pandas** — Manipulación de datos
-- **Requests + BeautifulSoup** — HTTP y parsing HTML
-- **SQLite3** — Base de datos ligera
-- **Docker** — Contenerización y despliegue
-
----
-
 ## 🏗️ Estructura del Repositorio
 
 ```
@@ -211,25 +188,6 @@ greenchemscore/
 └── .github/workflows/
     ├── docker-push.yml    # CI/CD para Docker Hub
     └── streamlit-deploy.yml # Verificación de build
-```
-
----
-
-## 🐳 Docker (Desarrollo)
-
-### Construir imagen local
-```bash
-docker build -t greenchemscore:latest .
-```
-
-### Ejecutar contenedor local
-```bash
-docker run -p 8501:8501 greenchemscore:latest
-```
-
-### Docker Compose local
-```bash
-docker-compose up --build -d
 ```
 
 ---
@@ -257,7 +215,7 @@ make docker    # Ejecutar contenedor Docker
    - **Repository:** `yohperez/greenchemscore`
    - **Branch:** `main`
    - **Main file path:** `app.py`
-4. Clic en **"Deploy"**.
+5. Clic en **"Deploy"**.
 
 ### Secrets en Streamlit Cloud
 
@@ -286,6 +244,7 @@ El repositorio incluye un workflow de GitHub Actions que construye y empuja la i
    - Ir a tu repo → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
    - Agregar:
      - `DOCKERHUB_TOKEN` — el access token generado
+     - `DOCKERHUB_USERNAME` — tu usuario de Docker Hub
 
 ### Pull de la imagen
 
