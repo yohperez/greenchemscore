@@ -21,20 +21,14 @@ Este proyecto está construido principalmente con:
 
 ---
 
-## 📋 Características
+## 🐳 Uso Rápido con Docker (Para Amigos)
 
-| Fase | Descripción | Tecnología |
-|------|-------------|------------|
-| **Extracción** | Lista semilla de químicos industriales y cosméticos | Python + Requests |
-| **Enriquecimiento** | Consulta a PubChem PUG REST: CID, fórmula, peso, SMILES, GHS H-statements | REST API |
-| **Persistencia** | Exportación dual a CSV y SQLite con esquema indexado | Pandas + SQLite3 |
-| **Visualización** | Dashboard interactivo con Plotly, Folium y Streamlit | Streamlit + Plotly |
-| **Simulación** | Simulador conceptual de sustitución de químicos | Python |
-| **Alertas** | Sistema conceptual de alertas regulatorias | Python |
+La forma más fácil de ejecutar la app localmente es usando Docker. No necesitas instalar Python ni dependencias.
 
----
+### Requisito único: Docker instalado
 
-## 🛠️ Tecnologías
+- **Windows/Mac**: [Descargar Docker Desktop](https://www.docker.com/products/docker-desktop)
+- **Linux**: `sudo apt install docker.io`
 
 - **Streamlit** — Framework para apps de datos
 - **Plotly** — Visualizaciones interactivas
@@ -44,10 +38,36 @@ Este proyecto está construido principalmente con:
 - **SQLite3** — Base de datos ligera
 - **Docker** — Containerización y despliegue
 
----
+```bash
+docker run -p 8501:8501 yohperez/greenchemscore:latest
+```
 
-## 🏗️ Estructura del Repositorio
+Abre **http://localhost:8501** en tu navegador. ¡Listo!
 
+### Opciones de ejecución
+
+| Modo | Comando | Uso |
+|------|---------|-----|
+| **Interactivo** | `docker run -p 8501:8501 yohperez/greenchemscore:latest` | Para probar, ver logs en terminal |
+| **Background** | `docker run -d -p 8501:8501 --name greenchem yohperez/greenchemscore:latest` | Segundo plano, siempre disponible |
+| **Con nombre** | `docker run -p 8501:8501 --name greenchem yohperez/greenchemscore:latest` | Fácil de detener: `docker stop greenchem` |
+
+### Docker Compose (Recomendado para uso continuo)
+
+Crea un archivo `docker-compose.yml`:
+
+```yaml
+version: "3.9"
+
+services:
+  greenchemscore:
+    image: yohperez/greenchemscore:latest
+    container_name: greenchemscore
+    ports:
+      - "8501:8501"
+    restart: unless-stopped
+    environment:
+      - STREAMLIT_SERVER_HEADLESS=true
 ```
 greenchemscore/
 ├── app.py                 # Aplicación Streamlit principal
@@ -65,57 +85,152 @@ greenchemscore/
 └── README.md              # Este archivo
 ```
 
----
+### Con persistencia de datos
 
-## 🖥️ Ejecución Local
+Para guardar los CSV y SQLite generados en tu PC:
 
-### 1. Clonar el repositorio
+```bash
+docker run -p 8501:8501 \
+  -v $(pwd)/data:/app/data \
+  --name greenchem \
+  yohperez/greenchemscore:latest
+```
+
+Los archivos se guardarán en la carpeta `data/` local.
+
+### Actualizar la app
+
+Cuando haya una nueva versión:
 
 ```bash
 git clone https://github.com/yohperez/greenchemscore.git
 cd greenchemscore
 ```
 
-### 2. Crear entorno virtual (recomendado)
+---
 
+## 🌐 Desplegar en Otras Plataformas
+
+Tu imagen Docker está lista para desplegar en cualquier plataforma que soporte contenedores:
+
+### Railway (Gratuito)
 ```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# o
-venv\Scripts\activate   # Windows
+npm install -g @railway-cli
+railway login
+railway init
+railway up
 ```
 
-### 3. Instalar dependencias
+### Render (Gratuito)
+1. Ve a [render.com](https://render.com)
+2. New Web Service → Existing Image
+3. Image URL: `docker.io/yohperez/greenchemscore:latest`
+4. Port: `8501`
 
+### AWS / Azure / Google Cloud
+Usa la imagen `yohperez/greenchemscore:latest` directamente en cualquier servicio de contenedores.
+
+### VPS Propio (DigitalOcean, Linode, etc.)
 ```bash
-pip install -r requirements.txt
+docker run -d -p 80:8501 --restart always yohperez/greenchemscore:latest
 ```
-
-### 4. Ejecutar la aplicación
-
-```bash
-streamlit run app.py
-```
-
-La app estará disponible en `http://localhost:8501`.
 
 ---
 
-## 🐳 Docker (Local)
+## 🖥️ Desarrollo Local
 
-### Construir imagen
+### Requisitos
+- Python 3.11+
+- Git
 
+### Instalación
+
+```bash
+# Clonar repo
+git clone https://github.com/yohperez/greenchemscore.git
+cd greenchemscore
+
+# Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate  # Windows
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar
+streamlit run app.py
+```
+
+La app estará en `http://localhost:8501`.
+
+---
+
+## 📋 Características
+
+| Página | Funcionalidad |
+|--------|---------------|
+| 🏠 **Inicio** | Descripción del pipeline y métricas del Green Score |
+| 🔬 **Pipeline ETL** | Ejecuta extracción, enriquecimiento PubChem y persistencia CSV/SQLite |
+| 📊 **Dashboard** | 6 visualizaciones Plotly: heatmap, radar, distribuciones, H-statements, pictogramas |
+| 🗺️ **Mapa Geográfico** | Mapa Folium con ubicaciones industriales ficticias |
+| 🧪 **Simulador de Sustitución** | Compara químico original vs. sustituto (conceptual) |
+| ⚖️ **Alertas Regulatorias** | Sistema conceptual de monitoreo REACH/EPA |
+| 📥 **Descargas** | Exporta datos en CSV, Excel y SQLite |
+
+---
+
+## 🛠️ Tecnologías
+
+- **Streamlit** — Framework de la app
+- **Plotly** — Visualizaciones interactivas
+- **Folium** — Mapas geográficos
+- **Pandas** — Manipulación de datos
+- **Requests + BeautifulSoup** — HTTP y parsing HTML
+- **SQLite3** — Base de datos ligera
+- **Docker** — Contenerización y despliegue
+
+---
+
+## 🏗️ Estructura del Repositorio
+
+```
+greenchemscore/
+├── app.py                 # Aplicación Streamlit principal
+├── requirements.txt       # Dependencias Python
+├── Dockerfile             # Imagen Docker para producción
+├── .dockerignore          # Exclusiones de Docker
+├── .gitignore             # Exclusiones de Git
+├── docker-compose.yml     # Compose para desarrollo local
+├── Makefile               # Comandos útiles
+├── README.md              # Este archivo
+├── LICENSE                # MIT License
+├── .streamlit/
+│   ├── config.toml        # Configuración de Streamlit
+│   └── secrets.toml       # Secrets (template, NO commitear)
+└── .github/workflows/
+    ├── docker-push.yml    # CI/CD para Docker Hub
+    └── streamlit-deploy.yml # Verificación de build
+```
+
+---
+
+## 🐳 Docker (Desarrollo)
+
+### Construir imagen local
 ```bash
 docker build -t greenchemscore:latest .
 ```
 
-### Ejecutar contenedor
-
+### Ejecutar contenedor local
 ```bash
 docker run -p 8501:8501 greenchemscore:latest
 ```
 
-La app estará disponible en `http://localhost:8501`.
+### Docker Compose local
+```bash
+docker-compose up --build -d
+```
 
 ---
 
@@ -142,22 +257,21 @@ make docker    # Ejecutar contenedor Docker
    - **Repository:** `yohperez/greenchemscore`
    - **Branch:** `main`
    - **Main file path:** `app.py`
-5. Hacer clic en **"Deploy"**.
+4. Clic en **"Deploy"**.
 
 ### Secrets en Streamlit Cloud
 
 Si necesitas API keys u otros secrets:
-1. En Streamlit Cloud, ir a tu app → **Settings** → **Secrets**.
+1. En Streamlit Cloud, ve a tu app → **Settings** → **Secrets**.
 2. Agregar los secrets en formato TOML:
    ```toml
    [api_keys]
    pubchem_api_key = "tu_key"
    ```
-3. En el código, acceder con `st.secrets["api_keys"]["pubchem_api_key"]`.
 
 ---
 
-## 🐳 Docker Hub (CI/CD con GitHub Actions)
+## 🐳 Docker Hub (CI/CD Automático)
 
 El repositorio incluye un workflow de GitHub Actions que construye y empuja la imagen Docker a Docker Hub automáticamente en cada push a `main`.
 
@@ -166,21 +280,12 @@ El repositorio incluye un workflow de GitHub Actions que construye y empuja la i
 1. **Crear cuenta en Docker Hub:** [hub.docker.com](https://hub.docker.com)
 2. **Generar Access Token:**
    - Ir a **Account Settings** → **Security** → **New Access Token**
+   - Permisos: **Read, Write, Delete**
    - Copiar el token generado.
 3. **Configurar secrets en GitHub:**
    - Ir a tu repo → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
    - Agregar:
-     - `DOCKERHUB_USERNAME` — tu usuario de Docker Hub
      - `DOCKERHUB_TOKEN` — el access token generado
-     - `DOCKERHUB_REPO_NAME` — nombre del repo en Docker Hub (ej: `greenchemscore`)
-
-### Workflow
-
-El archivo `.github/workflows/docker-push.yml` se ejecuta automáticamente:
-- En cada push a `main`
-- Construye la imagen multi-plataforma (`linux/amd64`, `linux/arm64`)
-- Etiqueta con `latest` y el SHA corto del commit
-- Empuja a Docker Hub
 
 ### Pull de la imagen
 
