@@ -35,7 +35,7 @@ Este proyecto está construido principalmente con:
 
 ---
 
-## 🐳 Uso Rápido con Docker (Para Amigos)
+## 🐳 Uso Rápido con Docker
 
 La forma más fácil de ejecutar la app localmente es usando Docker. No necesitas instalar Python ni dependencias.
 
